@@ -9,7 +9,7 @@ export const Banner = () => {
               <div className='post' key={items.id}>
                 <div className='content'>
                   <div className='img'>
-                    <img src={items.cover} alt='' />
+                    <img height={600} src={require('./../../assets/images/'+items.cover)} alt='cover' />
                   </div>
                   <div className='text'>
                     <h2>{items.title1}</h2>

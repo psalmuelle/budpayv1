@@ -52,7 +52,7 @@ export const Details = () => {
           {data.map((item) => (
             <div className='details_content'>
               <div className='details_content_img'>
-                <img src={item.cover} alt='' />
+                <img src={require('../../assets/images/4.jpg')} alt='' />
               </div>
               <div className='details_content_detail'>
                 <h1>{item.title}</h1>

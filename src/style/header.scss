@@ -102,6 +102,9 @@ header {
         }
         &_total {
           padding-top: 7px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
       }
       .hideCart {

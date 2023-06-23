@@ -24,7 +24,7 @@ export const ProductItem = ({ data }) => {
         {data.map((items) => (
           <div className='box' key={items.id}>
             <div className='img'>
-              <img src={items.cover} alt='cover' />
+              <img src={require('../../assets/images/'+items.cover)} alt='cover' />
               <div className='overlay'>
                 <button className='button'>
                   <FiShoppingBag onClick={()=> addToCart(items)}/>

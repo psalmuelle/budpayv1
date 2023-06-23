@@ -8,7 +8,7 @@ export const Card = () => {
     {hero.map((item)=>(
         <div className="card" key={item.id}>
             <div className="left">
-                <img src={item.cover} alt="cover" />
+                <img src={require('../../assets/images/'+item.cover)} alt="cover" />
             </div>
             <div className='right'>
                 <h4>{item.name}</h4>

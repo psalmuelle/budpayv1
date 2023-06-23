@@ -13,6 +13,7 @@ import {
 } from "react-icons/ai";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { DELETE } from "../../controller/action";
+import { BudPayButton, closeBudPayPaymentModal } from "budpay-react-v2";
 
 const Header = () => {
   useEffect(() => {
@@ -59,6 +60,30 @@ const Header = () => {
     setCartList(null);
   };
 
+  const config ={
+    api_key: process.env.SECRET_KEY,
+    email: 'user"email.com',
+  amount: '100',
+  first_name: 'John',
+  last_name: 'Doe',
+  currency: 'NGN',
+  
+  }
+  const budPayConfig = {
+    ...config,
+    text: 'Pay with BudPay',
+    btnSize: 'small',
+    callback_url: 'https://localhost:3000/',
+    callback: function (response) {
+      closeBudPayPaymentModal(); 
+      alert('Payment complete! Reference: ' + response.reference + ', Status: ' + response.status);
+    },
+    onClose: function (response) {
+      console.log(response);
+      alert('Transaction was not completed, window closed.');
+    },
+  };
+  
   return (
     <>
       <header>
@@ -115,7 +140,7 @@ const Header = () => {
                       <div className='details_content'>
                         <div className='details_content_img'>
                           <Link to={`/cart/${e.id}`} onClick={handleCloses}>
-                            <img src={e.cover} alt='' />
+                            <img src={require('../assets/images/2.jpg')} alt='' />
                           </Link>
                         </div>
                         <div className='details_content_detail'>
@@ -134,6 +159,9 @@ const Header = () => {
                     ))}
                     <div className='details_total'>
                       <h4>Total : NGN{price}</h4>
+                    <div className="right">
+                    <BudPayButton {...budPayConfig}/>
+                    </div>
                     </div>
                   </section>
                 ) : (
