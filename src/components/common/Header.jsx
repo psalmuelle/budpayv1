@@ -1,20 +1,63 @@
 import React, { useEffect, useState } from "react";
+import cartimg from "../assets/images/cart.png";
 import { BiSearch } from "react-icons/bi";
 import { BsBagCheck } from "react-icons/bs";
 import { RiUser3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { navlist } from "../assets/data/data";
-import { AiOutlineHeart, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineHeart,
+  AiOutlineMenu,
+  AiOutlineClose,
+  AiOutlineDelete,
+} from "react-icons/ai";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { DELETE } from "../../controller/action";
 
 const Header = () => {
-  useEffect(()=>{
+  useEffect(() => {
     window.addEventListener("scroll", function () {
-      const header = this.document.querySelector(".header");
+      const header = this.document.querySelector("header");
       header?.classList.toggle("active", this.window.scrollY > 100);
     });
-  },[])
+  }, []);
 
   const [mobile, setMobile] = useState(false);
+
+  const [cartList, setCartList] = useState(false);
+  const handleClose = () => {
+    setCartList(null);
+  };
+
+  // cart add in shop
+  const getdata = useSelector((state) => state.cartReducer.carts);
+  console.log(getdata);
+
+  // delete cart
+  const dispatch = useDispatch();
+  const delet = (id) => {
+    dispatch(DELETE(id));
+  };
+
+  // total prcie
+  const [price, setPrice] = useState(0);
+  console.log(price);
+
+  const totals = () => {
+    let price = 0;
+    getdata.map((e, i) => {
+      price = parseFloat(e.price) * e.qty + price;
+    });
+    setPrice(price);
+  };
+
+  useEffect(() => {
+    totals();
+  }, [totals]);
+
+  const handleCloses = () => {
+    setCartList(null);
+  };
 
   return (
     <>
@@ -26,7 +69,7 @@ const Header = () => {
                 {mobile ? (
                   <AiOutlineClose className='close heIcon' />
                 ) : (
-                  <AiOutlineMenu  className='open heIcon' />
+                  <AiOutlineMenu className='open heIcon' />
                 )}
               </button>
             </div>
@@ -56,12 +99,50 @@ const Header = () => {
               <AiOutlineHeart className='userIcon heIcon' />
             </div>
             <div className='right_card'>
-              <button className='button'>
+              <button className='button' onClick={() => setCartList(!cartList)}>
                 <BsBagCheck className='shop heIcon' />
-                MY CART(0)
+                MY CART({getdata.length})
               </button>
 
-              <div className='showCart'></div>
+              <div className={cartList ? "showCart" : "hideCart"}>
+                {getdata.length ? (
+                  <section className='details'>
+                    <div className='details_title'>
+                      <h3>Photo</h3>
+                      <p>Product Name</p>
+                    </div>
+                    {getdata.map((e) => (
+                      <div className='details_content'>
+                        <div className='details_content_img'>
+                          <Link to={`/cart/${e.id}`} onClick={handleCloses}>
+                            <img src={e.cover} alt='' />
+                          </Link>
+                        </div>
+                        <div className='details_content_detail'>
+                          <div className='details_content_detail_price'>
+                            <p>{e.title.slice(0, 20)}...</p>
+                            <p>Price : ${e.price}</p>
+                            <p>Quantity : {e.qty}</p>
+                          </div>
+                        </div>
+                        <div className='details_content_detail_icon'>
+                          <i onClick={() => delet(e.id)}>
+                            <AiOutlineDelete />
+                          </i>
+                        </div>
+                      </div>
+                    ))}
+                    <div className='details_total'>
+                      <h4>Total : NGN{price}</h4>
+                    </div>
+                  </section>
+                ) : (
+                  <div className='empty'>
+                    <p>Your cart is empty</p>
+                    <img src={cartimg} alt='cart' />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -69,5 +150,12 @@ const Header = () => {
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    amount: state.amount,
+  };
+};
+connect(mapStateToProps)(Header);
 
 export default Header;
