@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { BsBagCheck, BsBagFill } from "react-icons/bs";
+import { BsBagCheck } from "react-icons/bs";
 import { RiUser3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { navlist } from "../assets/data/data";
 import { AiOutlineHeart, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
 const Header = () => {
-  window.addEventListener("scroll", function () {
-    const header = this.document.querySelector(".header");
-    header.classList.toggle("active", this.window.screenY > 100);
-  });
+  useEffect(()=>{
+    window.addEventListener("scroll", function () {
+      const header = this.document.querySelector(".header");
+      header?.classList.toggle("active", this.window.scrollY > 100);
+    });
+  },[])
 
   const [mobile, setMobile] = useState(false);
 
